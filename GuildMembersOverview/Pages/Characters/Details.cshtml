@@ -29,6 +29,58 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Character.Role)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Character.RaidAttendances)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>RaidDay</th>
+                    <th>SignedUp</th>
+                    <th>Attendance</th>
+                    <th>AttendanceCount</th>
+                </tr>
+                @foreach (var item in Model.Character.RaidAttendances)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RaidDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SignedUp)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Attendance)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AttendanceCount)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Character.LootInfos)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>Received</th>
+                    <th>Item</th>
+                </tr>
+                @foreach (var item in Model.Character.LootInfos)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Received)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Item)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
     </dl>
 </div>
 <div>

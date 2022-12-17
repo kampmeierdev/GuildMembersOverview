@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
@@ -12,9 +8,9 @@ namespace GuildMembersOverview.Pages.Characters
 {
     public class DetailsModel : PageModel
     {
-        private readonly GuildMembersOverview.Data.GuildMembersOverviewContext _context;
+        private readonly GuildMembersOverviewContext _context;
 
-        public DetailsModel(GuildMembersOverview.Data.GuildMembersOverviewContext context)
+        public DetailsModel(GuildMembersOverviewContext context)
         {
             _context = context;
         }
@@ -28,7 +24,12 @@ namespace GuildMembersOverview.Pages.Characters
                 return NotFound();
             }
 
-            var character = await _context.Characters.FirstOrDefaultAsync(m => m.ID == id);
+            var character = await _context.Characters
+                .Include(c => c.RaidAttendances)
+                .Include(c => c.LootInfos)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.ID == id);
+
             if (character == null)
             {
                 return NotFound();

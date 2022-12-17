@@ -25,53 +25,39 @@ namespace GuildMembersOverview.Pages.Characters
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Characters == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var character =  await _context.Characters.FirstOrDefaultAsync(m => m.ID == id);
-            if (character == null)
+            Character = await _context.Characters.FirstOrDefaultAsync(c => c.ID == id);
+
+            if (Character == null)
             {
                 return NotFound();
             }
-            Character = character;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
+            var characterToUpdate = await _context.Characters.FirstOrDefaultAsync(c => c.ID == id);
+
+            if (characterToUpdate == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Character).State = EntityState.Modified;
-
-            try
+            if (await TryUpdateModelAsync(
+                characterToUpdate,
+                "character",
+                c => c.Name, c => c.Class, c => c.Role))
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CharacterExists(Character.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool CharacterExists(int id)
-        {
-          return _context.Characters.Any(e => e.ID == id);
+            return Page();
         }
     }
 }

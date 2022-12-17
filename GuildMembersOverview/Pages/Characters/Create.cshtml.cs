@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
@@ -12,9 +7,9 @@ namespace GuildMembersOverview.Pages.Characters
 {
     public class CreateModel : PageModel
     {
-        private readonly GuildMembersOverview.Data.GuildMembersOverviewContext _context;
+        private readonly GuildMembersOverviewContext _context;
 
-        public CreateModel(GuildMembersOverview.Data.GuildMembersOverviewContext context)
+        public CreateModel(GuildMembersOverviewContext context)
         {
             _context = context;
         }
@@ -26,20 +21,22 @@ namespace GuildMembersOverview.Pages.Characters
 
         [BindProperty]
         public Character Character { get; set; }
-        
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
+            var emptyCharacter = new Character();
+
+            if (await TryUpdateModelAsync(
+                emptyCharacter,
+                "character",
+                c => c.Name, c => c.Class, c => c.Role))
             {
-                return Page();
+                _context.Characters.Add(emptyCharacter);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
 
-            _context.Characters.Add(Character);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

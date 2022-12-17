@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
@@ -12,52 +8,70 @@ namespace GuildMembersOverview.Pages.Characters
 {
     public class DeleteModel : PageModel
     {
-        private readonly GuildMembersOverview.Data.GuildMembersOverviewContext _context;
+        private readonly GuildMembersOverviewContext _context;
+        private readonly ILogger<DeleteModel> _logger;
 
-        public DeleteModel(GuildMembersOverview.Data.GuildMembersOverviewContext context)
+        public DeleteModel(GuildMembersOverviewContext context, ILogger<DeleteModel> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [BindProperty]
-      public Character Character { get; set; }
+        public Character Character { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? saveChangesError = false)
         {
-            if (id == null || _context.Characters == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var character = await _context.Characters.FirstOrDefaultAsync(m => m.ID == id);
+            Character = await _context.Characters
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.ID == id);
 
-            if (character == null)
+            if (Character == null)
             {
                 return NotFound();
             }
-            else 
+
+            if (saveChangesError.GetValueOrDefault())
             {
-                Character = character;
+                ErrorMessage = string.Format("Delete {ID} failed. Try again", id);
             }
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Characters == null)
+            if (id == null)
             {
                 return NotFound();
             }
+
             var character = await _context.Characters.FindAsync(id);
 
-            if (character != null)
+            if (character == null)
             {
-                Character = character;
-                _context.Characters.Remove(Character);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
 
-            return RedirectToPage("./Index");
+            try
+            {
+                _context.Characters.Remove(character);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, ErrorMessage);
+
+                return RedirectToAction("./Delete",
+                                     new { id, saveChangesError = true });
+            }
         }
     }
 }
