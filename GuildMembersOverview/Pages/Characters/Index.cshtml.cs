@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.Members
+namespace GuildMembersOverview.Pages.Characters
 {
     public class IndexModel : PageModel
     {
@@ -19,13 +19,13 @@ namespace GuildMembersOverview.Pages.Members
             _context = context;
         }
 
-        public IList<Member> Member { get;set; } = default!;
+        public IList<Character> Character { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.Members != null)
+            if (_context.Characters != null)
             {
-                Member = await _context.Members.ToListAsync();
+                Character = await _context.Characters.ToListAsync();
             }
         }
     }

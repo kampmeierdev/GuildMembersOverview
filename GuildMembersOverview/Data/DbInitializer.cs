@@ -8,14 +8,22 @@ namespace GuildMembersOverview.Data
         public static void Initialize(GuildMembersOverviewContext context)
         {
             // Look for any students.
-            if (context.Members.Any())
+            if (context.Characters.Any())
             {
                 return;   // DB has been seeded
             }
 
+            var characters = new List<Character>()
+            {
+                new Character{Name="TestName", Class=ClassAndRole.Class.Druid, Role=ClassAndRole.Role.DPS}
+            };
+
+            context.Characters.AddRange(characters);
+            context.SaveChanges();
+
             var raidAttendances = new List<RaidAttendance>()
             {
-                new RaidAttendance{ID=22, RaidDay=DateTime.UtcNow.Date, SignedUp=true, Attendance=true, AttendanceCount=1}
+                new RaidAttendance{RaidDay=DateTime.UtcNow.Date, SignedUp=true, Attendance=true, AttendanceCount=1, CharacterID=1}
             };
 
             context.RaidAttendances.AddRange(raidAttendances);
@@ -23,27 +31,13 @@ namespace GuildMembersOverview.Data
 
             var lootInfos = new List<LootInfo>()
             {
-                new LootInfo{ID=33, Received=DateTime.UtcNow.Date, Item="TestItem"}
+                new LootInfo{Received=DateTime.UtcNow.Date, Item="TestItem", CharacterID=1}
             };
 
             context.LootInfos.AddRange(lootInfos);
             context.SaveChanges();
 
-            var characters = new List<Character>()
-            {
-                new Character{ID=11, Name="TestName", Class=ClassAndRole.Class.DeathKnight, Role=ClassAndRole.Role.Tank, RaidAttendanceList=raidAttendances, LootInfoList=lootInfos}
-            };
-
-            context.Characters.AddRange(characters);
-            context.SaveChanges();
-
-            var members = new Member[]
-            {
-                new Member{ID=1,  /*DiscordName="TestDiscordName",*/ Characters=characters, OverallRaidAttendance=1}
-            };
-
-            context.Members.AddRange(members);
-            context.SaveChanges();
+            
         }
     }
 }

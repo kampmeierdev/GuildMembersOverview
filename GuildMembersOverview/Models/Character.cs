@@ -18,9 +18,7 @@
         public string Name { get; set; }
         public ClassAndRole.Class Class { get; set; }
         public ClassAndRole.Role Role { get; set; }
-        //public int RaidAttendanceID { get; set; }
-        //public int LootInfoID { get; set; }
-        public List<RaidAttendance> RaidAttendanceList { get; set; }
-        public List<LootInfo> LootInfoList { get; set; }
+        public List<RaidAttendance> RaidAttendances { get; set; }
+        public List<LootInfo> LootInfos { get; set; }
     }
 }

@@ -13,15 +13,12 @@ namespace GuildMembersOverview.Data
             : base(options)
         {
         }
-
-        public DbSet<Member> Members { get; set; } = default!;
         public DbSet<Character> Characters { get; set; } = default!;
         public DbSet<RaidAttendance> RaidAttendances { get; set; } = default!;
         public DbSet<LootInfo> LootInfos { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Member>().ToTable("Member");
             modelBuilder.Entity<Character>().ToTable("Character");
             modelBuilder.Entity<RaidAttendance>().ToTable("RaidAttendance");
             modelBuilder.Entity<LootInfo>().ToTable("LootInfo");

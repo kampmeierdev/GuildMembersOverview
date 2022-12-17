@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.Members
+namespace GuildMembersOverview.Pages.Characters
 {
     public class DetailsModel : PageModel
     {
@@ -19,23 +19,23 @@ namespace GuildMembersOverview.Pages.Members
             _context = context;
         }
 
-      public Member Member { get; set; }
+      public Character Character { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Members == null)
+            if (id == null || _context.Characters == null)
             {
                 return NotFound();
             }
 
-            var member = await _context.Members.FirstOrDefaultAsync(m => m.ID == id);
-            if (member == null)
+            var character = await _context.Characters.FirstOrDefaultAsync(m => m.ID == id);
+            if (character == null)
             {
                 return NotFound();
             }
             else 
             {
-                Member = member;
+                Character = character;
             }
             return Page();
         }

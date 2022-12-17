@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.Members
+namespace GuildMembersOverview.Pages.Characters
 {
     public class CreateModel : PageModel
     {
@@ -25,7 +25,7 @@ namespace GuildMembersOverview.Pages.Members
         }
 
         [BindProperty]
-        public Member Member { get; set; }
+        public Character Character { get; set; }
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -36,7 +36,7 @@ namespace GuildMembersOverview.Pages.Members
                 return Page();
             }
 
-            _context.Members.Add(Member);
+            _context.Characters.Add(Character);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

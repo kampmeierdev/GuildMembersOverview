@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.Members
+namespace GuildMembersOverview.Pages.Characters
 {
     public class EditModel : PageModel
     {
@@ -21,21 +21,21 @@ namespace GuildMembersOverview.Pages.Members
         }
 
         [BindProperty]
-        public Member Member { get; set; } = default!;
+        public Character Character { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Members == null)
+            if (id == null || _context.Characters == null)
             {
                 return NotFound();
             }
 
-            var member =  await _context.Members.FirstOrDefaultAsync(m => m.ID == id);
-            if (member == null)
+            var character =  await _context.Characters.FirstOrDefaultAsync(m => m.ID == id);
+            if (character == null)
             {
                 return NotFound();
             }
-            Member = member;
+            Character = character;
             return Page();
         }
 
@@ -48,7 +48,7 @@ namespace GuildMembersOverview.Pages.Members
                 return Page();
             }
 
-            _context.Attach(Member).State = EntityState.Modified;
+            _context.Attach(Character).State = EntityState.Modified;
 
             try
             {
@@ -56,7 +56,7 @@ namespace GuildMembersOverview.Pages.Members
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MemberExists(Member.ID))
+                if (!CharacterExists(Character.ID))
                 {
                     return NotFound();
                 }
@@ -69,9 +69,9 @@ namespace GuildMembersOverview.Pages.Members
             return RedirectToPage("./Index");
         }
 
-        private bool MemberExists(int id)
+        private bool CharacterExists(int id)
         {
-          return _context.Members.Any(e => e.ID == id);
+          return _context.Characters.Any(e => e.ID == id);
         }
     }
 }

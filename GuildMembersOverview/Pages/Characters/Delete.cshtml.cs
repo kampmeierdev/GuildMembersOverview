@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.Members
+namespace GuildMembersOverview.Pages.Characters
 {
     public class DeleteModel : PageModel
     {
@@ -20,40 +20,40 @@ namespace GuildMembersOverview.Pages.Members
         }
 
         [BindProperty]
-      public Member Member { get; set; }
+      public Character Character { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Members == null)
+            if (id == null || _context.Characters == null)
             {
                 return NotFound();
             }
 
-            var member = await _context.Members.FirstOrDefaultAsync(m => m.ID == id);
+            var character = await _context.Characters.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (member == null)
+            if (character == null)
             {
                 return NotFound();
             }
             else 
             {
-                Member = member;
+                Character = character;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Members == null)
+            if (id == null || _context.Characters == null)
             {
                 return NotFound();
             }
-            var member = await _context.Members.FindAsync(id);
+            var character = await _context.Characters.FindAsync(id);
 
-            if (member != null)
+            if (character != null)
             {
-                Member = member;
-                _context.Members.Remove(Member);
+                Character = character;
+                _context.Characters.Remove(Character);
                 await _context.SaveChangesAsync();
             }
 
