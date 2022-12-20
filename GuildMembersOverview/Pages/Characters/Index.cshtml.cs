@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
@@ -12,21 +8,61 @@ namespace GuildMembersOverview.Pages.Characters
 {
     public class IndexModel : PageModel
     {
-        private readonly GuildMembersOverview.Data.GuildMembersOverviewContext _context;
+        private readonly GuildMembersOverviewContext _context;
+        private readonly IConfiguration Configuration;
 
-        public IndexModel(GuildMembersOverview.Data.GuildMembersOverviewContext context)
+        public IndexModel(GuildMembersOverviewContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
-        public IList<Character> Character { get;set; } = default!;
+        public string NameSort { get; set; }
+        public string ClassSort { get; set; }
+        public string RoleSort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
 
-        public async Task OnGetAsync()
+        public PaginatedList<Character> Characters { get; set; }
+
+        public async Task OnGetAsync(string sortOrder, string searchString, string currentFilter, int? pageIndex)
         {
-            if (_context.Characters != null)
+            CurrentSort = sortOrder;
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ClassSort = sortOrder == "Class" ? "class_desc" : "Class";
+            RoleSort = sortOrder == "Role" ? "role_desc" : "Role";
+
+            if (searchString != null)
             {
-                Character = await _context.Characters.ToListAsync();
+                pageIndex = 1;
             }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+
+            IQueryable<Character> charactersQuery = from c in _context.Characters select c;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                charactersQuery = charactersQuery.Where(c => c.Name.Contains(searchString));
+            }
+
+            charactersQuery = sortOrder switch
+            {
+                "name_desc" => charactersQuery.OrderByDescending(c => c.Name),
+                "Class" => charactersQuery.OrderBy(c => c.Class),
+                "class_desc" => charactersQuery.OrderByDescending(c => c.Class),
+                "Role" => charactersQuery.OrderBy(c => c.Role),
+                "role_desc" => charactersQuery.OrderByDescending(c => c.Role),
+                _ => charactersQuery.OrderBy(c => c.Name),
+            };
+
+            var pageSize = Configuration.GetValue("PageSize", 4);
+            Characters = await PaginatedList<Character>.CreateAsync(
+                charactersQuery.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
     }
 }

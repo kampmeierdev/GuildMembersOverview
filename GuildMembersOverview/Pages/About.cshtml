@@ -1,0 +1,32 @@
+﻿@page
+@model GuildMembersOverview.Pages.AboutModel
+
+@{
+    ViewData["Title"] = "Guild Statistics";
+}
+
+<h2>Guild Statistics</h2>
+
+<table>
+    <tr>
+        <th>
+            Characters
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Counts.OrderBy(d => d.Class).ThenBy(d => d.Role))
+    {
+        <tr>
+            <td>
+                @item.Class
+            </td>
+            <td>
+                @item.Role
+            </td>
+            <td>
+                @item.CharactersCount
+            </td>
+        </tr>
+    }
+</table>
+

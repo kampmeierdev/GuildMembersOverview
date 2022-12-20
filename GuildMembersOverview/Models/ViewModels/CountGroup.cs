@@ -1,4 +1,4 @@
-﻿namespace GuildMembersOverview.Models
+﻿namespace GuildMembersOverview.Models.ViewModels
 {
     public class ClassAndRole
     {
@@ -11,14 +11,11 @@
             DPS, Heal, Tank
         }
     }
-    
-    public class Character
+
+    public class CountGroup
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
         public ClassAndRole.Class Class { get; set; }
         public ClassAndRole.Role Role { get; set; }
-        public List<RaidAttendance> RaidAttendances { get; set; }
-        public List<LootInfo> LootInfos { get; set; }
+        public int CharactersCount { get; set; }
     }
 }
