@@ -1,8 +1,11 @@
-﻿namespace GuildMembersOverview.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GuildMembersOverview.Models
 {
     public class RaidAttendance
     {
         public int ID { get; set; }
+        [DataType(DataType.Date)]
         public DateTime RaidDay { get; set; }
         public bool SignedUp { get; set; }
         public bool Attendance { get; set; }
