@@ -1,0 +1,45 @@
+﻿@page
+@model GuildMembersOverview.Pages.LootInfos.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>LootInfo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LootInfo.ID" />
+            <div class="form-group">
+                <label asp-for="LootInfo.Character" class="control-label"></label>
+                <select asp-for="LootInfo.Character" class="form-control" asp-items="ViewBag.Character"></select>
+                <span asp-validation-for="LootInfo.Character" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LootInfo.Item" class="control-label"></label>
+                <input asp-for="LootInfo.Item" class="form-control" />
+                <span asp-validation-for="LootInfo.Item" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LootInfo.Received" class="control-label"></label>
+                <input asp-for="LootInfo.Received" class="form-control" />
+                <span asp-validation-for="LootInfo.Received" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

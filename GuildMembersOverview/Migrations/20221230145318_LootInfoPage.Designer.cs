@@ -4,6 +4,7 @@ using GuildMembersOverview.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GuildMembersOverview.Migrations
 {
     [DbContext(typeof(GuildMembersOverviewContext))]
-    partial class GuildMembersOverviewContextModelSnapshot : ModelSnapshot
+    [Migration("20221230145318_LootInfoPage")]
+    partial class LootInfoPage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
