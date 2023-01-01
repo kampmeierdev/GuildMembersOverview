@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.LootInfos
+namespace GuildMembersOverview.Pages.RaidAttendances
 {
     public class EditModel : PageModel
     {
@@ -17,7 +17,7 @@ namespace GuildMembersOverview.Pages.LootInfos
         }
 
         [BindProperty]
-        public LootInfo LootInfo { get; set; }
+        public RaidAttendance RaidAttendance { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -26,12 +26,12 @@ namespace GuildMembersOverview.Pages.LootInfos
                 return NotFound();
             }
 
-            var lootInfo =  await _context.LootInfos.FirstOrDefaultAsync(m => m.ID == id);
-            if (lootInfo == null)
+            var raidAttendance = await _context.RaidAttendances.FirstOrDefaultAsync(r => r.ID == id);
+            if (raidAttendance == null)
             {
                 return NotFound();
             }
-            LootInfo = lootInfo;
+            RaidAttendance = raidAttendance;
             ViewData["Character"] = new SelectList(_context.Characters, "ID", "Name");
             return Page();
         }
@@ -43,17 +43,17 @@ namespace GuildMembersOverview.Pages.LootInfos
                 return NotFound();
             }
 
-            var lootInfoToUpdate = await _context.LootInfos.FindAsync(id);
+            var raidAttendanceToUpdate = await _context.RaidAttendances.FindAsync(id);
 
-            if (lootInfoToUpdate == null)
+            if (raidAttendanceToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (await TryUpdateModelAsync<LootInfo>(
-                 lootInfoToUpdate,
-                 "lootInfo",
-                 l => l.CharacterID, l => l.Item, l => l.Received))
+            if (await TryUpdateModelAsync<RaidAttendance>(
+                 raidAttendanceToUpdate,
+                 "raidAttendance",
+                 r => r.CharacterID, r => r.RaidDay, r => r.SignedUp, r => r.Attendance, r => r.AttendanceCount))
             {
                 await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");

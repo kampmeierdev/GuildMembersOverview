@@ -1,0 +1,60 @@
+﻿@page
+@model GuildMembersOverview.Pages.RaidAttendances.IndexModel
+
+@{
+    ViewData["Title"] = "RaidAttendances";
+}
+
+<h1>Raid Attendances</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RaidAttendances[0].Character)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaidAttendances[0].RaidDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaidAttendances[0].SignedUp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaidAttendances[0].Attendance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RaidAttendances[0].AttendanceCount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.RaidAttendances)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Character.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaidDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SignedUp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attendance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AttendanceCount)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a>
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.LootInfos
+namespace GuildMembersOverview.Pages.RaidAttendances
 {
     public class IndexModel : PageModel
     {
@@ -14,12 +14,12 @@ namespace GuildMembersOverview.Pages.LootInfos
             _context = context;
         }
 
-        public IList<LootInfo> LootInfos { get; set; }
+        public IList<RaidAttendance> RaidAttendances { get;set; }
 
         public async Task OnGetAsync()
         {
-            LootInfos = await _context.LootInfos
-                .Include(l => l.Character)
+            RaidAttendances = await _context.RaidAttendances
+                .Include(r => r.Character)
                 .AsNoTracking()
                 .ToListAsync();
         }

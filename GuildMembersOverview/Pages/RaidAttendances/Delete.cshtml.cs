@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.LootInfos
+namespace GuildMembersOverview.Pages.RaidAttendances
 {
     public class DeleteModel : PageModel
     {
@@ -16,7 +16,7 @@ namespace GuildMembersOverview.Pages.LootInfos
         }
 
         [BindProperty]
-      public LootInfo LootInfo { get; set; }
+      public RaidAttendance RaidAttendance { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -25,34 +25,34 @@ namespace GuildMembersOverview.Pages.LootInfos
                 return NotFound();
             }
 
-            var lootinfo = await _context.LootInfos
+            var raidattendance = await _context.RaidAttendances
                 .Include(l => l.Character)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (lootinfo == null)
+            if (raidattendance == null)
             {
                 return NotFound();
             }
             else 
             {
-                LootInfo = lootinfo;
+                RaidAttendance = raidattendance;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.LootInfos == null)
+            if (id == null || _context.RaidAttendances == null)
             {
                 return NotFound();
             }
-            var lootinfo = await _context.LootInfos.FindAsync(id);
+            var raidattendance = await _context.RaidAttendances.FindAsync(id);
 
-            if (lootinfo != null)
+            if (raidattendance != null)
             {
-                LootInfo = lootinfo;
-                _context.LootInfos.Remove(LootInfo);
+                RaidAttendance = raidattendance;
+                _context.RaidAttendances.Remove(RaidAttendance);
                 await _context.SaveChangesAsync();
             }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using GuildMembersOverview.Data;
 using GuildMembersOverview.Models;
 
-namespace GuildMembersOverview.Pages.LootInfos
+namespace GuildMembersOverview.Pages.RaidAttendances
 {
     public class CreateModel : PageModel
     {
@@ -22,18 +22,18 @@ namespace GuildMembersOverview.Pages.LootInfos
         }
 
         [BindProperty]
-        public LootInfo LootInfo { get; set; }
+        public RaidAttendance RaidAttendance { get; set; }
         
         public async Task<IActionResult> OnPostAsync()
         {
-            var emptyLootInfo= new LootInfo();
+            var emptyRaidAttendance = new RaidAttendance();
 
-            if (await TryUpdateModelAsync<LootInfo>(
-                 emptyLootInfo,
-                 "lootInfo",
-                 l => l.ID, l => l.CharacterID, l => l.Item, l => l.Received))
+            if (await TryUpdateModelAsync<RaidAttendance>(
+                 emptyRaidAttendance,
+                 "raidAttendance",
+                 r => r.ID, r => r.CharacterID, r => r.RaidDay, r => r.SignedUp, r => r.Attendance, r => r.AttendanceCount))
             {
-                _context.LootInfos.Add(emptyLootInfo);
+                _context.RaidAttendances.Add(emptyRaidAttendance);
                 await _context.SaveChangesAsync();
                 return RedirectToPage("./Index");
             }
